@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Add Attendance</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container-medium">
+			<h1>Add Attendance</h1>
+
+			<form id="searchForm" class="vertical-form">
+				<label for="roll">Admission No:</label>
+				<input type="text" id="roll" required />
+
+				<label for="class">Class:</label>
+				<input type="text" id="class" required />
+
+				<button type="submit" class="btn add full">Search Student</button>
+			</form>
+
+			<div id="attendanceSection" style="display: none; margin-top: 25px">
+				<h2>Enter Attendance</h2>
+				<p id="studentName" class="center"></p>
+
+				<form id="attendanceForm" class="vertical-form">
+					<label for="month">Month:</label>
+					<select id="month" required>
+						<option value="">Select Month</option>
+						<option>January</option>
+						<option>February</option>
+						<option>March</option>
+						<option>April</option>
+						<option>May</option>
+						<option>June</option>
+						<option>July</option>
+						<option>August</option>
+						<option>September</option>
+						<option>October</option>
+						<option>November</option>
+						<option>December</option>
+					</select>
+
+					<label for="daysPresent">Number of Days Present:</label>
+					<input type="number" id="daysPresent" required />
+
+					<label for="totalDays">Total Number of Days:</label>
+					<input type="number" id="totalDays" required />
+
+					<button type="submit" class="btn add full">Save Attendance</button>
+				</form>
+			</div>
+
+			<div
+				id="message"
+				class="center"
+				style="margin-top: 15px; font-weight: 600"
+			></div>
+
+			<a href="dashboard.html" class="btn edit full" style="margin-top: 20px">
+				⬅️ Back to Dashboard
+			</a>
+		</div>
+
+		<script src="addAttendance.js"></script>
+	</body>
+</html>

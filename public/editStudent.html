@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Edit Student Details</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container-medium">
+			<h1>Edit Student Details</h1>
+
+			<!-- 🔍 Search Student -->
+			<form id="searchForm" class="vertical-form">
+				<label for="roll">Admission No:</label>
+				<input type="text" id="roll" required />
+
+				<label for="class">Class:</label>
+				<input type="text" id="class" required />
+
+				<button type="submit" class="btn search full">Search Student</button>
+			</form>
+
+			<!-- ✏️ Edit Section -->
+			<div id="editSection" style="display: none; margin-top: 25px">
+				<h2>Edit Details</h2>
+				<form id="editForm" class="vertical-form">
+					<label for="name">Student Name:</label>
+					<input type="text" id="name" required />
+
+					<label for="father">Father/Guardian Name:</label>
+					<input type="text" id="father" required />
+
+					<label for="aadhar">Student Aadhar No:</label>
+					<input
+						type="text"
+						id="aadhar"
+						maxlength="12"
+						pattern="\d{12}"
+						title="Enter valid 12-digit Aadhar number"
+						required
+					/>
+
+					<label for="dob">Student DOB:</label>
+					<input type="date" id="dob" required />
+
+					<label for="mobile">Parent Mobile No:</label>
+					<input
+						type="tel"
+						id="mobile"
+						pattern="[0-9]{10}"
+						maxlength="10"
+						title="Enter valid 10-digit mobile number"
+						required
+					/>
+
+					<label for="pen">PEN ID:</label>
+					<input
+						type="text"
+						id="pen"
+						maxlength="11"
+						pattern="\d{11}"
+						title="Enter valid 11-digit PEN ID"
+						required
+					/>
+
+					<label for="apaar">APAAR ID:</label>
+					<input
+						type="text"
+						id="apaar"
+						maxlength="12"
+						pattern="\d{12}"
+						title="Enter valid 12-digit APAAR ID"
+						required
+					/>
+
+					<button type="submit" class="btn add full">Update Student</button>
+				</form>
+			</div>
+
+			<div
+				id="message"
+				class="center"
+				style="margin-top: 15px; font-weight: 600"
+			></div>
+
+			<a href="dashboard.html" class="btn edit full" style="margin-top: 20px"
+				>⬅️ Back to Dashboard</a
+			>
+		</div>
+
+		<script src="editStudent.js"></script>
+		<script>
+			if (localStorage.getItem("loggedIn") !== "true") {
+				alert("Please log in to access this page!");
+				window.location.href = "login.html";
+			}
+		</script>
+	</body>
+</html>

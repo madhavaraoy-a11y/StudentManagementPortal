@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Promote Student</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container-medium">
+			<h1>Promote Student</h1>
+
+			<form id="promoteForm" class="vertical-form">
+				<label for="roll">Admission No:</label>
+				<input type="text" id="roll" required />
+
+				<label for="class">Current Class:</label>
+				<input type="text" id="class" required />
+
+				<label for="year">Current Academic Year:</label>
+				<select id="year" required>
+					<option value="">Select Year</option>
+					<option>2025-2026</option>
+					<option>2026-2027</option>
+					<option>2027-2028</option>
+					<option>2028-2029</option>
+					<option>2029-2030</option>
+					<option>2030-2031</option>
+					<option>2031-2032</option>
+					<option>2032-2033</option>
+					<option>2033-2034</option>
+					<option>2034-2035</option>
+				</select>
+
+				<label for="newClass">Promote To Class:</label>
+				<input type="text" id="newClass" required />
+
+				<label for="newYear">New Academic Year:</label>
+				<select id="newYear" required>
+					<option value="">Select New Year</option>
+					<option>2025-2026</option>
+					<option>2026-2027</option>
+					<option>2027-2028</option>
+					<option>2028-2029</option>
+					<option>2029-2030</option>
+					<option>2030-2031</option>
+					<option>2031-2032</option>
+					<option>2032-2033</option>
+					<option>2033-2034</option>
+					<option>2034-2035</option>
+				</select>
+
+				<button type="submit" class="btn add full">Promote Student</button>
+			</form>
+
+			<div
+				id="message"
+				class="center"
+				style="margin-top: 15px; font-weight: 600"
+			></div>
+
+			<a href="dashboard.html" class="btn edit full" style="margin-top: 20px">
+				⬅️ Back to Dashboard
+			</a>
+		</div>
+
+		<script src="promoteStudent.js"></script>
+	</body>
+</html>

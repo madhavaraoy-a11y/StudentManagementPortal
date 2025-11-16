@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>View Details</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container-medium center">
+			<h1>View Student Data</h1>
+			<div class="buttons-vertical">
+				<a href="searchStudent.html" class="btn search full">
+					🔍 <b>Display Marks & Attendance</b>
+				</a>
+
+				<!-- this button will redirect based on login -->
+				<button id="viewStudentBtn" class="btn display full">
+					👨‍🎓 <b>Display Student Details</b>
+				</button>
+			</div>
+
+			<a href="index.html" class="btn edit full" style="margin-top: 20px">
+				⬅️ Back to Home
+			</a>
+		</div>
+
+		<script>
+			document
+				.getElementById("viewStudentBtn")
+				.addEventListener("click", () => {
+					const loggedIn = localStorage.getItem("loggedIn");
+					if (loggedIn === "true") {
+						window.location.href = "displayStudent.html";
+					} else {
+						alert("Please log in to view student details!");
+						window.location.href = "login.html";
+					}
+				});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Login - Student Management Portal</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container-medium center">
+			<h1>Admin Login</h1>
+			<form id="loginForm" class="vertical-form">
+				<label for="username">Username:</label>
+				<input type="text" id="username" required />
+
+				<label for="password">Password:</label>
+				<input type="password" id="password" required />
+
+				<button type="submit" class="btn add full">Login</button>
+			</form>
+
+			<p
+				id="loginMessage"
+				class="center"
+				style="margin-top: 15px; font-weight: 600"
+			></p>
+			<a
+				href="changePassword.html"
+				class="btn edit full"
+				style="margin-top: 20px"
+			>
+				🔐 Forgot / Change Password
+			</a>
+		</div>
+
+		<script src="login.js"></script>
+	</body>
+</html>
