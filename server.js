@@ -221,8 +221,15 @@ app.patch("/api/students/marks", async (req, res) => {
 
 // ---------------------- FRONTEND FALLBACK (IMPORTANT!) ----------------------
 // MUST BE LAST & MUST BE GET ONLY
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+app.use((req, res, next) => {
+  if (
+    req.method === "GET" &&
+    !req.path.startsWith("/api/") &&
+    !req.path.includes(".")
+  ) {
+    return res.sendFile(path.join(__dirname, "public", "index.html"));
+  }
+  next();
 });
 
 // ---------------------- START SERVER ----------------------
