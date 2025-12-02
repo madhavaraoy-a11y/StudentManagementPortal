@@ -13,20 +13,17 @@ app.use(express.json());
 // Serve frontend
 app.use(express.static(path.join(__dirname, "public")));
 
-// ---------------------- MONGO CONNECTION ----------------------
 const MONGO_URI =
   "mongodb+srv://madhavaraoy_db_user:zBJlsTqkAcsbZCEX@cluster0.aljmybe.mongodb.net/studentDB?retryWrites=true&w=majority";
 
 // ---------------------- SCHEMAS ----------------------
 
-// Admin Schema
 const adminSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   secretKey: { type: String, required: true },
 });
 
-// Student Schema
 const studentSchema = new mongoose.Schema({
   roll: { type: String, required: true },
   name: { type: String, required: true },
@@ -39,68 +36,60 @@ const studentSchema = new mongoose.Schema({
   apaar: { type: String, required: true },
   year: { type: String, required: true },
 
-  // COMPLEX DATA
   marks: { type: Object, default: {} },
   attendance: { type: Object, default: {} },
 });
 
-// Models
 const Admin = mongoose.model("Admin", adminSchema);
 const Student = mongoose.model("Student", studentSchema);
 
 // ---------------------- DEFAULT ROUTE ----------------------
 app.get("/", (req, res) => {
-  res.send("✅ Backend is running...");
+  res.send("Backend Running ✔");
 });
 
-// ---------------------- CREATE DEFAULT ADMIN ----------------------
+// ---------------------- DEFAULT ADMIN ----------------------
 async function createDefaultAdmin() {
   const existing = await Admin.findOne({ username: "admin" });
-
   if (!existing) {
     await Admin.create({
       username: "admin",
       password: "admin123",
       secretKey: "superkey123",
     });
-    console.log("✅ Default admin created.");
+    console.log("Default admin created ✔");
   }
 }
 
 // ---------------------- ADMIN ROUTES ----------------------
+
+// Login
 app.post("/api/admin/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    const admin = await Admin.findOne({ username });
-    if (!admin || admin.password !== password)
-      return res.status(401).json({ message: "Invalid credentials" });
+  const admin = await Admin.findOne({ username });
+  if (!admin || admin.password !== password)
+    return res.status(401).json({ message: "Invalid username or password" });
 
-    res.json({ message: "Login successful" });
-  } catch (e) {
-    res.status(500).json({ message: "Server error" });
-  }
+  res.json({ message: "Login successful" });
 });
 
+// Change Password
 app.post("/api/admin/change-password", async (req, res) => {
-  try {
-    const { key, newPassword } = req.body;
+  const { key, newPassword } = req.body;
 
-    const admin = await Admin.findOne({ secretKey: key });
-    if (!admin) return res.status(403).json({ message: "Invalid Secret Key" });
+  const admin = await Admin.findOne({ secretKey: key });
+  if (!admin) return res.status(403).json({ message: "Invalid secret key" });
 
-    admin.password = newPassword;
-    await admin.save();
+  admin.password = newPassword;
+  await admin.save();
 
-    res.json({ message: "Password updated successfully" });
-  } catch (e) {
-    res.status(500).json({ message: "Server error" });
-  }
+  res.json({ message: "Password changed successfully" });
 });
 
 // ---------------------- STUDENT ROUTES ----------------------
 
-// ADD STUDENT
+// Add Student
 app.post("/api/students", async (req, res) => {
   try {
     const {
@@ -118,14 +107,14 @@ app.post("/api/students", async (req, res) => {
       attendance,
     } = req.body;
 
-    const existing = await Student.findOne({
+    const exists = await Student.findOne({
       $or: [{ roll, class: cls, year }, { aadhar }, { pen }, { apaar }],
     });
 
-    if (existing)
+    if (exists)
       return res
         .status(400)
-        .json({ message: "Student already exists for this year/class" });
+        .json({ message: "Student with same details already exists" });
 
     const student = new Student({
       roll,
@@ -143,20 +132,19 @@ app.post("/api/students", async (req, res) => {
     });
 
     await student.save();
-
     res.json({ message: "Student added successfully" });
   } catch (e) {
-    res.status(500).json({ message: "Server error adding student" });
+    res.status(500).json({ message: "Error adding student" });
   }
 });
 
-// FETCH STUDENT
+// Fetch Student
 app.get("/api/students", async (req, res) => {
   try {
     const { roll, class: cls, year } = req.query;
 
     if (!roll || !cls)
-      return res.status(400).json({ message: "Roll & Class required" });
+      return res.status(400).json({ message: "Roll and Class required" });
 
     const query = { roll, class: cls };
     if (year) query.year = year;
@@ -166,7 +154,7 @@ app.get("/api/students", async (req, res) => {
     if (!student) return res.status(404).json({ message: "Student not found" });
 
     res.json(student);
-  } catch (err) {
+  } catch (e) {
     res.status(500).json({ message: "Error fetching student" });
   }
 });
@@ -180,18 +168,18 @@ app.patch("/api/students/attendance", async (req, res) => {
 
     if (!student) return res.status(404).json({ message: "Student not found" });
 
-    // MERGE — not overwrite
     if (!student.attendance) student.attendance = {};
 
-    student.attendance[month] = {
-      daysPresent,
-      totalDays,
-    };
+    student.attendance[month] = { daysPresent, totalDays };
+
+    // Important to save nested object
+    student.markModified("attendance");
 
     await student.save();
 
     res.json({ message: "Attendance saved successfully" });
-  } catch (err) {
+  } catch (e) {
+    console.error("Attendance Error:", e);
     res.status(500).json({ message: "Error saving attendance" });
   }
 });
@@ -205,22 +193,23 @@ app.patch("/api/students/marks", async (req, res) => {
 
     if (!student) return res.status(404).json({ message: "Student not found" });
 
-    // MERGE — not overwrite
     if (!student.marks) student.marks = {};
     if (!student.marks[subject]) student.marks[subject] = {};
 
     student.marks[subject][exam] = marks;
 
+    student.markModified("marks");
+
     await student.save();
 
     res.json({ message: "Marks saved successfully" });
-  } catch (err) {
+  } catch (e) {
+    console.error("Marks Error:", e);
     res.status(500).json({ message: "Error saving marks" });
   }
 });
 
-// ---------------------- FRONTEND FALLBACK (IMPORTANT!) ----------------------
-// MUST BE LAST & MUST BE GET ONLY
+// ---------------------- SAFE FALLBACK ROUTE ----------------------
 app.use((req, res, next) => {
   if (
     req.method === "GET" &&
@@ -236,11 +225,14 @@ app.use((req, res, next) => {
 mongoose
   .connect(MONGO_URI)
   .then(async () => {
-    console.log("🔥 Connected to MongoDB");
+    console.log("Connected to MongoDB ✔");
+
     await createDefaultAdmin();
 
     app.listen(5000, () =>
-      console.log("🚀 Server running on http://localhost:5000")
+      console.log("Server running at http://localhost:5000 ✔")
     );
   })
-  .catch((err) => console.log("❌ MongoDB Connection Error:", err));
+  .catch((err) => {
+    console.error("MongoDB Error:", err);
+  });
