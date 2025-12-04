@@ -62,7 +62,7 @@ searchForm.addEventListener("submit", async (e) => {
 				examTotals[exam] = 0;
 				examMaxTotals[exam] = ["FA1", "FA2", "FA3", "FA4"].includes(exam)
 					? subjects.length * 50
-					: subjects.length * 100;
+					: subjects.length * 80;
 			});
 
 			let tableHTML = `
