@@ -208,6 +208,44 @@ app.patch("/api/students/marks", async (req, res) => {
     res.status(500).json({ message: "Error saving marks" });
   }
 });
+// ---------------------- UPDATE STUDENT ----------------------
+app.put("/api/students", async (req, res) => {
+  try {
+    const {
+      roll,
+      class: cls,
+      year,
+      name,
+      father,
+      aadhar,
+      dob,
+      mobile,
+      pen,
+      apaar,
+    } = req.body;
+
+    const student = await Student.findOne({ roll, class: cls, year });
+
+    if (!student)
+      return res.status(404).json({ message: "Student not found" });
+
+    student.name = name;
+    student.father = father;
+    student.aadhar = aadhar;
+    student.dob = dob;
+    student.mobile = mobile;
+    student.pen = pen;
+    student.apaar = apaar;
+
+    await student.save();
+
+    res.json({ message: "Student details updated successfully" });
+  } catch (e) {
+    console.error("Update Error:", e);
+    res.status(500).json({ message: "Error updating student" });
+  }
+});
+
 
 // ---------------------- SAFE FALLBACK ROUTE ----------------------
 app.use((req, res, next) => {
